@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Kirish — ABU-chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="card auth-card">
+    <a href="/" class="logo" style="display:block; text-align:center; margin-bottom:14px;">ABU-<span>chat</span></a>
+    <h1>Kirish</h1>
+    <p class="lead">Akkauntingizga kirib qoidalarni boshqaring.</p>
+
+    <div id="alert"></div>
+
+    <form id="form">
+      <label for="email">Email</label>
+      <input type="email" id="email" required autocomplete="email" placeholder="siz@example.com">
+
+      <label for="password">Parol</label>
+      <input type="password" id="password" required autocomplete="current-password" placeholder="••••••••">
+
+      <button type="submit" class="btn full" id="submit" style="margin-top:18px;">Kirish</button>
+    </form>
+
+    <p class="meta">Akkauntingiz yo'qmi? <a href="/register.html">Ro'yxatdan o'tish</a></p>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script>
+  const form = document.getElementById('form');
+  const alertBox = document.getElementById('alert');
+  const submit = document.getElementById('submit');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    alertBox.innerHTML = '';
+    submit.disabled = true; submit.textContent = 'Tekshirilmoqda...';
+    try {
+      await api.post('/api/auth/login', {
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value,
+      });
+      location.href = '/dashboard.html';
+    } catch (err) {
+      let msg = 'Xatolik.';
+      if (err.payload && err.payload.error === 'invalid_credentials') msg = 'Email yoki parol noto\'g\'ri.';
+      if (err.payload && err.payload.error === 'account_disabled') msg = 'Akkaunt o\'chirilgan.';
+      alertBox.innerHTML = `<div class="alert error">${msg}</div>`;
+    } finally {
+      submit.disabled = false; submit.textContent = 'Kirish';
+    }
+  });
+</script>
+</body>
+</html>

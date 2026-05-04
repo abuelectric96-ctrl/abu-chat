@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Data Deletion Instructions — ABU-chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --green-dark:#4CAF8A; --blue-deep:#1E6FBA; --blue-bright:#3D9DF2; --text:#1F2A37; --muted:#64748B; --line:#E5E7EB; --bg:#F8FBFE; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Inter','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; padding:40px 20px; }
+  .wrap { max-width:760px; margin:0 auto; background:#fff; padding:48px; border-radius:16px; box-shadow:0 6px 24px rgba(30,111,186,.08); }
+  .lang-switch { text-align:right; margin-bottom:20px; }
+  .lang-switch a { color:var(--blue-deep); text-decoration:none; font-weight:600; padding:6px 12px; border:1px solid var(--line); border-radius:8px; margin-left:6px; font-size:13px; }
+  .lang-switch a.active { background:var(--blue-deep); color:#fff; }
+  h1 { font-size:30px; color:var(--blue-deep); margin-bottom:10px; }
+  .sub { color:var(--muted); font-size:14px; margin-bottom:30px; }
+  h2 { font-size:19px; color:var(--text); margin:26px 0 10px; padding-bottom:6px; border-bottom:2px solid var(--green-dark); }
+  p, li { color:var(--text); margin-bottom:10px; }
+  ol { margin:8px 0 14px 22px; }
+  .lang { display:none; }
+  .lang.active { display:block; }
+  .step-box { background:#F0FFF4; border-left:4px solid var(--green-dark); padding:14px 18px; border-radius:8px; margin:14px 0; }
+  .contact-box { background:#F0F9FF; border-left:4px solid var(--blue-bright); padding:14px 18px; border-radius:8px; margin:16px 0; }
+  code { background:#F1F5F9; padding:2px 6px; border-radius:4px; font-family:monospace; font-size:13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="lang-switch">
+  <a href="#" class="active" onclick="setLang('en'); return false;">English</a>
+  <a href="#" onclick="setLang('uz'); return false;">O'zbekcha</a>
+</div>
+
+<!-- ============ ENGLISH ============ -->
+<div id="lang-en" class="lang active">
+  <h1>Data Deletion Instructions</h1>
+  <p class="sub">How to permanently delete your data from ABU-chat.</p>
+
+  <p>ABU-chat respects your right to control your personal data. You can delete your account and all associated data at any time, free of charge. This page describes how.</p>
+
+  <h2>What gets deleted</h2>
+  <ul>
+    <li>Your account profile (name, email, phone, password hash)</li>
+    <li>All connected Instagram account information and access tokens</li>
+    <li>All auto-reply rules and configurations you created</li>
+    <li>All comment and reply logs we stored on your behalf</li>
+    <li>All billing records (kept only as required by tax law)</li>
+  </ul>
+
+  <h2>Method 1 — Delete from your dashboard (recommended)</h2>
+  <div class="step-box">
+    <ol>
+      <li>Sign in at <a href="https://abu-chat.uz">abu-chat.uz</a></li>
+      <li>Open <b>Settings → Account</b></li>
+      <li>Click <b>Delete my account</b></li>
+      <li>Confirm by typing <code>DELETE</code></li>
+      <li>Your data is removed immediately. Backup copies are purged within 30 days.</li>
+    </ol>
+  </div>
+
+  <h2>Method 2 — Email request</h2>
+  <p>If you cannot access your dashboard, send an email from the address registered on your account to:</p>
+  <div class="contact-box">
+    <p><b>Email:</b> <a href="mailto:abuelectric96@gmail.com">abuelectric96@gmail.com</a><br>
+    <b>Subject:</b> Data Deletion Request<br>
+    <b>Body:</b> Please include your registered email and Instagram username.</p>
+  </div>
+  <p>We will confirm and complete deletion within <b>30 days</b>.</p>
+
+  <h2>Method 3 — Remove via Facebook</h2>
+  <p>You can remove ABU-chat's access to your Instagram at any time:</p>
+  <ol>
+    <li>Open Facebook → <b>Settings → Business Integrations</b></li>
+    <li>Find <b>ABU-chat</b> in the list</li>
+    <li>Click <b>Remove</b></li>
+  </ol>
+  <p>This revokes our access tokens. To also delete the data we already stored, please use Method 1 or 2.</p>
+
+  <h2>What is not deleted</h2>
+  <ul>
+    <li>Replies that ABU-chat already posted to your Instagram remain on Instagram. To remove them, delete them in the Instagram app.</li>
+    <li>Anonymized aggregate analytics that cannot be linked back to you may be retained.</li>
+    <li>Records required by law (e.g. tax invoices) are kept for the legally mandated period.</li>
+  </ul>
+
+  <h2>Confirmation</h2>
+  <p>Once deletion is complete you will receive an email confirmation. If you have any questions, contact <a href="mailto:abuelectric96@gmail.com">abuelectric96@gmail.com</a>.</p>
+</div>
+
+<!-- ============ UZBEK ============ -->
+<div id="lang-uz" class="lang">
+  <h1>Ma'lumotlarni O'chirish Yo'riqnomasi</h1>
+  <p class="sub">ABU-chat'dan ma'lumotlaringizni butunlay o'chirish.</p>
+
+  <p>ABU-chat sizning shaxsiy ma'lumotlaringiz ustidan nazoratingizni hurmat qiladi. Akkauntingizni va u bilan bog'liq barcha ma'lumotlarni istalgan vaqtda, bepul, butunlay o'chirishingiz mumkin.</p>
+
+  <h2>Nimalar o'chiriladi</h2>
+  <ul>
+    <li>Akkaunt profilingiz (ism, email, telefon, parol hash)</li>
+    <li>Ulangan barcha Instagram akkauntlari va access tokenlari</li>
+    <li>Yaratgan barcha avto-javob qoidalari va sozlamalar</li>
+    <li>Sizning nomingizdan saqlangan barcha komment va javob loglari</li>
+    <li>Hisob-kitob yozuvlari (faqat soliq qonunlari talab qilgan muddatgacha saqlanadi)</li>
+  </ul>
+
+  <h2>1-yo'l — Dashboard orqali (tavsiya qilinadi)</h2>
+  <div class="step-box">
+    <ol>
+      <li><a href="https://abu-chat.uz">abu-chat.uz</a> ga kiring</li>
+      <li><b>Sozlamalar → Akkaunt</b> bo'limini oching</li>
+      <li><b>Akkauntimni o'chirish</b> tugmasini bosing</li>
+      <li><code>DELETE</code> so'zini yozib tasdiqlang</li>
+      <li>Ma'lumotlaringiz darhol o'chiriladi. Backup nusxalar 30 kun ichida tozalanadi.</li>
+    </ol>
+  </div>
+
+  <h2>2-yo'l — Email orqali</h2>
+  <p>Dashboard'ga kira olmasangiz, akkauntingiz email manzilidan quyidagiga email yuboring:</p>
+  <div class="contact-box">
+    <p><b>Email:</b> <a href="mailto:abuelectric96@gmail.com">abuelectric96@gmail.com</a><br>
+    <b>Mavzu:</b> Ma'lumotlarni o'chirish so'rovi<br>
+    <b>Matn:</b> Akkaunt email'i va Instagram username'ini ko'rsating.</p>
+  </div>
+  <p>Biz <b>30 kun</b> ichida tasdiqlab, o'chirishni yakunlaymiz.</p>
+
+  <h2>3-yo'l — Facebook orqali</h2>
+  <p>ABU-chat'ning Instagram'ingizga ruxsatini istalgan vaqtda olib tashlashingiz mumkin:</p>
+  <ol>
+    <li>Facebook → <b>Settings → Business Integrations</b></li>
+    <li>Ro'yxatda <b>ABU-chat</b>'ni toping</li>
+    <li><b>Remove</b> tugmasini bosing</li>
+  </ol>
+  <p>Bu access token'larimizni bekor qiladi. Allaqachon saqlangan ma'lumotni ham o'chirish uchun 1 yoki 2-yo'ldan foydalaning.</p>
+
+  <h2>Nimalar o'chmaydi</h2>
+  <ul>
+    <li>ABU-chat allaqachon Instagram'ga yuborgan javoblar Instagram'da qoladi. Ularni o'chirish uchun Instagram ilovasidan foydalaning.</li>
+    <li>Sizga bog'lab bo'lmaydigan anonim umumlashtirilgan statistika saqlanishi mumkin.</li>
+    <li>Qonun talab qilgan yozuvlar (masalan, hisob-fakturalar) qonuniy muddat davomida saqlanadi.</li>
+  </ul>
+
+  <h2>Tasdiqlash</h2>
+  <p>O'chirish tugagach email orqali tasdiq xati keladi. Savollar bo'lsa: <a href="mailto:abuelectric96@gmail.com">abuelectric96@gmail.com</a>.</p>
+</div>
+
+<script>
+function setLang(l) {
+  document.querySelectorAll('.lang').forEach(el => el.classList.remove('active'));
+  document.getElementById('lang-' + l).classList.add('active');
+  document.querySelectorAll('.lang-switch a').forEach(a => a.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</div>
+</body>
+</html>

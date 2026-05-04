@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard — ABU-chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a href="/" class="logo">ABU-<span>chat</span></a>
+    <a href="#" class="active" data-tab="overview">Umumiy</a>
+    <a href="#" data-tab="accounts">Instagram akkauntlari</a>
+    <a href="#" data-tab="rules">Avto-javob qoidalari</a>
+    <a href="#" data-tab="logs">Tarix (loglar)</a>
+    <div style="margin-top:auto; padding-top: 18px; border-top: 1px solid var(--line);">
+      <div id="who" style="font-size:13px; color:var(--muted); margin-bottom:8px;"></div>
+      <a href="#" id="logout" class="btn outline full" style="font-size:13px;">Chiqish</a>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <section data-pane="overview">
+      <h1 class="page-title">Salom <span id="hi"></span> 👋</h1>
+      <p class="page-sub">Ko'pchilik mijozlar 5 daqiqada birinchi qoidasini sozlashadi.</p>
+
+      <div id="alert"></div>
+
+      <div class="grid-2" style="margin-bottom:18px;">
+        <div class="stat"><div class="lbl">Ulangan akkauntlar</div><div class="num" id="stat_accounts">0</div></div>
+        <div class="stat"><div class="lbl">Bu oy yuborilgan javoblar</div><div class="num" id="stat_replies">0</div></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:8px;">1-qadam — Instagram'ni ulang</h3>
+        <p style="color:var(--muted); margin-bottom:14px; font-size:14px;">
+          Facebook orqali ruxsat bering. Parolingizni so'ramaymiz.
+        </p>
+        <a href="/api/auth/meta/start" class="btn">Instagramni ulash</a>
+      </div>
+    </section>
+
+    <!-- ACCOUNTS -->
+    <section data-pane="accounts" hidden>
+      <h1 class="page-title">Instagram akkauntlari</h1>
+      <p class="page-sub">Ulangan barcha Instagram akkauntlaringiz.</p>
+      <div id="accounts_list" class="card">Yuklanmoqda...</div>
+      <div style="margin-top:14px;">
+        <a href="/api/auth/meta/start" class="btn">+ Yangi akkaunt ulash</a>
+      </div>
+    </section>
+
+    <!-- RULES -->
+    <section data-pane="rules" hidden>
+      <h1 class="page-title">Avto-javob qoidalari</h1>
+      <p class="page-sub">Kalit so'z kelganda qaysi javob yuborilishini sozlang.</p>
+
+      <div class="card" style="margin-bottom:18px;">
+        <h3 style="margin-bottom:10px;">Yangi qoida qo'shish</h3>
+        <form id="rule_form">
+          <label>Instagram akkaunt</label>
+          <select id="r_account" required></select>
+
+          <div class="grid-2">
+            <div>
+              <label>Kalit so'z</label>
+              <input type="text" id="r_keyword" required placeholder="masalan: narx" maxlength="120">
+            </div>
+            <div>
+              <label>Post ID (ixtiyoriy — bo'sh = barcha postga)</label>
+              <input type="text" id="r_post" placeholder="masalan: 17900000000000000">
+            </div>
+          </div>
+
+          <label>Javob matni <span style="font-size:11px;color:var(--muted);">({username} — yozgan kishi)</span></label>
+          <textarea id="r_reply" required placeholder="Salom {username}! Narxlar: 250 000 so'm. Buyurtma: t.me/sizning_brand"></textarea>
+
+          <button class="btn green" type="submit" style="margin-top:14px;">Qo'shish</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:10px;">Mavjud qoidalar</h3>
+        <div id="rules_list">Yuklanmoqda...</div>
+      </div>
+    </section>
+
+    <!-- LOGS -->
+    <section data-pane="logs" hidden>
+      <h1 class="page-title">Tarix (so'nggi 100 ta)</h1>
+      <p class="page-sub">Qaysi kommentga qanday javob yuborilgani.</p>
+      <div id="logs_list" class="card">Yuklanmoqda...</div>
+    </section>
+
+  </main>
+</div>
+
+<script src="/js/api.js"></script>
+<script>
+(async () => {
+  const me = await requireAuth();
+  if (!me) return;
+  const client = me.client;
+  document.getElementById('hi').textContent = client.full_name || client.email;
+  document.getElementById('who').textContent = client.email;
+
+  // ---- Tabs ----
+  document.querySelectorAll('.sidebar a[data-tab]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.sidebar a').forEach((x) => x.classList.remove('active'));
+      a.classList.add('active');
+      const tab = a.dataset.tab;
+      document.querySelectorAll('section[data-pane]').forEach((s) => s.hidden = (s.dataset.pane !== tab));
+      if (tab === 'accounts') loadAccounts();
+      if (tab === 'rules') loadRules();
+      if (tab === 'logs') loadLogs();
+    });
+  });
+
+  document.getElementById('logout').addEventListener('click', async (e) => {
+    e.preventDefault();
+    await api.post('/api/auth/logout');
+    location.href = '/login.html';
+  });
+
+  // ---- Banner from OAuth callback ----
+  const params = new URLSearchParams(location.search);
+  if (params.get('ig') === 'connected') {
+    document.getElementById('alert').innerHTML =
+      `<div class="alert success">Instagram muvaffaqiyatli ulandi 🎉</div>`;
+  } else if (params.get('ig') === 'none') {
+    document.getElementById('alert').innerHTML =
+      `<div class="alert error">Hisobingizda Instagram Business akkaunt topilmadi. Avval IG'ni Facebook Page'ga ulang.</div>`;
+  }
+
+  // ---- Stats ----
+  await refreshStats();
+  async function refreshStats() {
+    try {
+      const a = await api.get('/api/auth/meta/ig-accounts');
+      document.getElementById('stat_accounts').textContent = a.accounts.length;
+    } catch {}
+    try {
+      const u = await api.get('/api/rules/usage');
+      document.getElementById('stat_replies').textContent = u.usage.replies_sent;
+    } catch {}
+  }
+
+  // ---- Accounts ----
+  async function loadAccounts() {
+    const box = document.getElementById('accounts_list');
+    try {
+      const r = await api.get('/api/auth/meta/ig-accounts');
+      if (!r.accounts.length) { box.textContent = 'Hali biror akkaunt ulanmagan.'; return; }
+      box.innerHTML = `<table><thead><tr>
+        <th>Foydalanuvchi nomi</th><th>IG ID</th><th>Holat</th><th>Ulangan vaqt</th><th></th>
+      </tr></thead><tbody>${r.accounts.map((a) => `
+        <tr>
+          <td><b>@${escapeHtml(a.username)}</b></td>
+          <td>${a.ig_user_id}</td>
+          <td><span class="badge ${a.is_active ? 'sent' : 'skipped'}">${a.is_active ? 'Aktiv' : 'O\\'chirilgan'}</span></td>
+          <td>${new Date(a.connected_at).toLocaleDateString('uz-UZ')}</td>
+          <td>${a.is_active ? `<button class="btn outline" data-disconnect="${a.id}" style="font-size:12px;padding:6px 12px;">Uzish</button>` : ''}</td>
+        </tr>
+      `).join('')}</tbody></table>`;
+      box.querySelectorAll('[data-disconnect]').forEach((b) => {
+        b.addEventListener('click', async () => {
+          if (!confirm('Akkauntni uzasizmi?')) return;
+          await api.post(`/api/auth/meta/ig-accounts/${b.dataset.disconnect}/disconnect`);
+          loadAccounts(); refreshStats();
+        });
+      });
+    } catch (e) { box.textContent = 'Yuklashda xato.'; }
+  }
+
+  // ---- Rules ----
+  let cachedAccounts = [];
+  async function loadRules() {
+    cachedAccounts = (await api.get('/api/auth/meta/ig-accounts')).accounts;
+    const sel = document.getElementById('r_account');
+    sel.innerHTML = cachedAccounts.length
+      ? cachedAccounts.map((a) => `<option value="${a.id}">@${escapeHtml(a.username)}</option>`).join('')
+      : '<option disabled>Avval Instagram akkaunt ulang</option>';
+
+    const r = await api.get('/api/rules');
+    const list = document.getElementById('rules_list');
+    if (!r.rules.length) { list.textContent = 'Hozircha qoida yo\'q.'; return; }
+    list.innerHTML = `<table><thead><tr>
+      <th>Akkaunt</th><th>Kalit so'z</th><th>Javob</th><th>Holat</th><th></th>
+    </tr></thead><tbody>${r.rules.map((rl) => {
+      const acc = cachedAccounts.find((a) => a.id === rl.ig_account_id);
+      return `<tr>
+        <td>${acc ? '@' + escapeHtml(acc.username) : '—'}</td>
+        <td><b>${escapeHtml(rl.keyword)}</b></td>
+        <td style="max-width:340px;">${escapeHtml(rl.reply_text)}</td>
+        <td><span class="badge ${rl.is_active ? 'sent' : 'skipped'}">${rl.is_active ? 'Aktiv' : 'Pauza'}</span></td>
+        <td><button class="btn danger" data-del="${rl.id}" style="font-size:12px;padding:6px 12px;">O'chirish</button></td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+    list.querySelectorAll('[data-del]').forEach((b) => {
+      b.addEventListener('click', async () => {
+        if (!confirm('Qoidani o\'chirasizmi?')) return;
+        await api.del(`/api/rules/${b.dataset.del}`);
+        loadRules();
+      });
+    });
+  }
+
+  document.getElementById('rule_form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      await api.post('/api/rules', {
+        ig_account_id: +document.getElementById('r_account').value,
+        keyword: document.getElementById('r_keyword').value.trim(),
+        post_id_filter: document.getElementById('r_post').value.trim() || null,
+        reply_text: document.getElementById('r_reply').value,
+      });
+      e.target.reset();
+      loadRules();
+    } catch (err) {
+      alert('Xato: ' + (err.payload?.error || err.message));
+    }
+  });
+
+  // ---- Logs ----
+  async function loadLogs() {
+    const box = document.getElementById('logs_list');
+    try {
+      const r = await api.get('/api/rules/replies');
+      if (!r.replies.length) { box.textContent = 'Hozircha javoblar yo\'q.'; return; }
+      box.innerHTML = `<table><thead><tr>
+        <th>Vaqt</th><th>Akkaunt</th><th>Komment</th><th>Yuborilgan javob</th><th>Holat</th>
+      </tr></thead><tbody>${r.replies.map((x) => `
+        <tr>
+          <td>${new Date(x.created_at).toLocaleString('uz-UZ')}</td>
+          <td>@${escapeHtml(x.ig_username)}</td>
+          <td style="max-width:240px;">${escapeHtml(x.comment_text || '')}</td>
+          <td style="max-width:240px;">${escapeHtml(x.reply_text || '—')}</td>
+          <td><span class="badge ${x.status}">${x.status}</span></td>
+        </tr>
+      `).join('')}</tbody></table>`;
+    } catch { box.textContent = 'Yuklashda xato.'; }
+  }
+
+  function escapeHtml(s) { return String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+})();
+</script>
+</body>
+</html>
