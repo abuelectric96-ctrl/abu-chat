@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>FAQ - ABU-chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .page { max-width: 820px; margin: 0 auto; padding: 60px 20px; }
+  h1 { font-size: 36px; color: var(--blue-deep); margin-bottom: 8px; }
+  .lead { color: var(--muted); margin-bottom: 32px; font-size: 17px; }
+  .faq-item { background: white; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+  .faq-q { padding: 18px 22px; cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; align-items: center; transition: background .15s; }
+  .faq-q:hover { background: #F8FBFE; }
+  .faq-q::after { content: "+"; font-size: 24px; color: var(--blue-deep); transition: transform .2s; }
+  .faq-item.open .faq-q::after { transform: rotate(45deg); }
+  .faq-a { padding: 0 22px; max-height: 0; overflow: hidden; transition: max-height .25s ease, padding .25s ease; color: #475569; line-height: 1.7; font-size: 15px; }
+  .faq-item.open .faq-a { padding: 4px 22px 22px; max-height: 600px; }
+  .faq-cat { margin: 32px 0 14px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+</style>
+</head>
+<body>
+<nav class="top"><div class="container inner"><a href="/" class="logo">ABU-<span>chat</span></a><div class="nav-links"><a href="/#features">Imkoniyatlar</a><a href="/#pricing">Narxlar</a><a href="/faq.html">FAQ</a><a href="/contact.html">Aloqa</a><a href="/login.html" class="btn outline">Kirish</a></div></div></nav>
+<div class="page">
+<h1>Tez-tez so'raladigan savollar</h1>
+<p class="lead">Eng ko'p so'raladigan savollarga javoblar. Topilmasa - <a href="/contact.html">biz bilan bog'laning</a>.</p>
+<div class="faq-cat">Umumiy</div>
+<div class="faq-item"><div class="faq-q">ABU-chat nima qiladi?</div><div class="faq-a">Sizning Instagram Reels yoki postingizga komment kelganda, oldindan belgilangan kalit so'zlar asosida avtomatik javob yuboradi. Masalan, kimdir "narxi qancha?" deb so'rasa, bizning bot avtomatik javob yozadi: "Salom! Narxlar: 250 000 so'm." Sizdan vaqt tejaydi, mijozdan ishonch oladi.</div></div>
+<div class="faq-item"><div class="faq-q">Instagram parolimni berishim kerakmi?</div><div class="faq-a"><b>Yo'q.</b> Hech qachon. Biz Meta'ning rasmiy Facebook Login tizimi orqali ishlaymiz - siz faqat ruxsat berasiz, parolingiz bizga ko'rinmaydi va saqlanmaydi.</div></div>
+<div class="faq-item"><div class="faq-q">Akkauntim bloklanib qolmaydimi?</div><div class="faq-a"><b>Yo'q.</b> Biz Instagram'ning rasmiy API'sini ishlatamiz, Meta qoidalariga to'liq amal qilamiz. ManyChat va Chatfuel ham xuddi shu yo'l bilan ishlaydi.</div></div>
+<div class="faq-cat">Texnik talablar</div>
+<div class="faq-item"><div class="faq-q">Qanday Instagram akkauntlari ishlaydi?</div><div class="faq-a">Faqat <b>Business</b> yoki <b>Creator</b> akkauntlar. Personal (oddiy) akkaunt ishlamaydi - Instagram sozlamalaridan bepul "Switch to Professional" qilib o'ting.</div></div>
+<div class="faq-item"><div class="faq-q">Qancha tez javob yuboriladi?</div><div class="faq-a">Komment yozilganidan keyin <b>5-30 soniya</b> ichida javob ketadi.</div></div>
+<div class="faq-item"><div class="faq-q">Necha kalit so'z qo'shsam bo'ladi?</div><div class="faq-a">Cheklov yo'q. Necha kerak bo'lsa shuncha qo'shasiz.</div></div>
+<div class="faq-cat">Narxlar va to'lov</div>
+<div class="faq-item"><div class="faq-q">Bepul tarif qanday cheklovlarga ega?</div><div class="faq-a">1 ta Instagram akkaunt va oyiga 50 ta avto-javob. Sinab ko'rish uchun yetadi.</div></div>
+<div class="faq-item"><div class="faq-q">To'lovni qanday qilaman?</div><div class="faq-a">Click yoki Payme orqali. Karta qo'shasiz, har oyda avtomatik yechiladi. Istalgan vaqtda obunani bekor qilasiz.</div></div>
+<div class="faq-item"><div class="faq-q">Pulni qaytarib olaman bo'ladimi?</div><div class="faq-a">Birinchi 7 kun ichida - <b>ha, to'liq qaytaramiz</b>.</div></div>
+<div class="faq-cat">Ma'lumotlar va xavfsizlik</div>
+<div class="faq-item"><div class="faq-q">Kommentlar va javoblar saqlanadimi?</div><div class="faq-a">Ha, hisobot uchun. Lekin <b>90 kundan keyin avtomatik o'chiriladi</b>.</div></div>
+<div class="faq-item"><div class="faq-q">Mijozlarimning ma'lumotlari xavfsizmi?</div><div class="faq-a">Albatta. Parollar bcrypt bilan hashlanadi, Instagram tokenlari shifrlanadi (AES-256-GCM).</div></div>
+<div class="faq-cat">Boshqa</div>
+<div class="faq-item"><div class="faq-q">DM ga ham javob beradimi?</div><div class="faq-a">Hozircha <b>yo'q</b> - faqat post va Reels kommentlariga. DM avto-javob 2-versiyada qo'shiladi.</div></div>
+<div class="faq-item"><div class="faq-q">Bir nechta Instagram boshqarish mumkinmi?</div><div class="faq-a">Ha. Boshlovchi - 1 ta, Biznes - 3 ta, Pro - 5 ta.</div></div>
+<div class="faq-item"><div class="faq-q">Yordam kerak bo'lsa qayerga murojaat qilaman?</div><div class="faq-a"><a href="/contact.html">Aloqa sahifasi</a> orqali yoki email: abuelectric96@gmail.com</div></div>
+</div>
+<footer class="site" style="background: var(--text); color: #cbd5e1; padding: 36px 0; text-align: center; font-size: 13px;"><div class="container"><a href="/" style="color:white; font-weight:800; font-size:22px; text-decoration:none;">ABU-chat</a><p style="margin-top:8px;">Instagram avto-javob xizmati</p><p style="margin-top:12px;"><a href="/privacy_policy.html" style="color:#93c5fd; margin:0 10px;">Maxfiylik</a><a href="/terms_of_service.html" style="color:#93c5fd; margin:0 10px;">Shartlar</a><a href="/contact.html" style="color:#93c5fd; margin:0 10px;">Aloqa</a></p><p style="margin-top:12px; opacity:.6;">2026 ABU-chat</p></div></footer>
+<script>document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));</script>
+</body></html>
