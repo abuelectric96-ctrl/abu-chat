@@ -3,35 +3,77 @@
 <head>
 <meta charset="UTF-8"><title>Aloqa - ABU-chat</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/css/style.css">
 <style>
   .page { max-width: 920px; margin: 0 auto; padding: 60px 20px; }
   h1 { font-size: 36px; color: var(--blue-deep); margin-bottom: 8px; }
   .lead { color: var(--muted); margin-bottom: 36px; font-size: 17px; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
-  .contact-card { background: white; border: 1px solid var(--line); padding: 26px; border-radius: 14px; transition: .2s; }
-  .contact-card:hover { box-shadow: 0 10px 24px rgba(30,111,186,.08); border-color: var(--blue-bright); }
-  .contact-card .icon { width: 48px; height: 48px; border-radius: 12px; margin-bottom: 14px; background: linear-gradient(135deg, var(--green-soft), var(--blue-bright)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 22px; }
-  .contact-card h3 { margin-bottom: 6px; font-size: 18px; }
-  .contact-card p { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
-  .contact-card a { font-size: 16px; font-weight: 600; word-break: break-all; }
-  .form-section { background: white; padding: 32px; border-radius: 14px; margin-top: 24px; border: 1px solid var(--line); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 540px) { .grid { grid-template-columns: 1fr; } }
+  .contact-card { background: white; border: 1px solid var(--line); padding: 24px; border-radius: 14px; transition: .2s; }
+  .contact-card:hover { box-shadow: 0 10px 24px rgba(30,111,186,.08); border-color: var(--blue-bright); transform: translateY(-2px); }
+  .contact-card .icon { width: 44px; height: 44px; border-radius: 12px; margin-bottom: 12px; background: linear-gradient(135deg, var(--green-soft), var(--blue-bright)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 16px; }
+  .contact-card h3 { margin-bottom: 4px; font-size: 17px; }
+  .contact-card p { color: var(--muted); font-size: 13px; margin-bottom: 10px; line-height: 1.5; }
+  .contact-card a { font-size: 15px; font-weight: 600; word-break: break-all; }
+  .form-section { background: white; padding: 32px; border-radius: 14px; margin-top: 28px; border: 1px solid var(--line); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 540px) { .form-row { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-<nav class="top"><div class="container inner"><a href="/" class="logo">ABU-<span>chat</span></a><div class="nav-links"><a href="/#features">Imkoniyatlar</a><a href="/#pricing">Narxlar</a><a href="/faq.html">FAQ</a><a href="/contact.html">Aloqa</a><a href="/login.html" class="btn outline">Kirish</a></div></div></nav>
+<nav class="top"><div class="container inner"><a href="/" class="logo">ABU-<span>chat</span></a><div class="nav-links"><a href="/#features">Imkoniyatlar</a><a href="/#pricing">Narxlar</a><a href="/about.html">Biz haqimizda</a><a href="/faq.html">FAQ</a><a href="/contact.html">Aloqa</a><a href="/login.html" class="btn outline">Kirish</a></div></div></nav>
+
 <div class="page">
 <h1>Biz bilan bog'lanish</h1>
 <p class="lead">Savollaringizga 24 soat ichida javob beramiz. Ish vaqti: dushanba-shanba, 9:00 - 21:00.</p>
+
 <div class="grid">
-  <div class="contact-card"><div class="icon">@</div><h3>Email</h3><p>Eng tezkor yo'l. Texnik savol, taklif yoki shikoyat bo'lsa.</p><a href="mailto:abuelectric96@gmail.com">abuelectric96@gmail.com</a></div>
-  <div class="contact-card"><div class="icon">T</div><h3>Telegram</h3><p>Eng qulay variant. Pro tarif uchun shaxsiy yordam.</p><a href="https://t.me/abu_chat_uz" target="_blank">@abu_chat_uz</a></div>
-  <div class="contact-card"><div class="icon">P</div><h3>Telefon</h3><p>Shoshilinch holatda qo'ng'iroq qiling. Ish kunlari 9:00-18:00.</p><a href="tel:+998900000000">+998 90 000 00 00</a></div>
-  <div class="contact-card"><div class="icon">M</div><h3>Manzil</h3><p>Bizning ofis (yuzma-yuz uchrashuv kerak bo'lsa).</p><a href="#">Toshkent, O'zbekiston</a></div>
+  <div class="contact-card">
+    <div class="icon">@</div>
+    <h3>Email</h3>
+    <p>Eng tezkor yozma yo'l. Texnik savol yoki taklif uchun.</p>
+    <a href="mailto:abuelectric96@gmail.com">abuelectric96@gmail.com</a>
+  </div>
+
+  <div class="contact-card">
+    <div class="icon">P</div>
+    <h3>Telefon</h3>
+    <p>Shoshilinch holatda qo'ng'iroq qiling. 9:00-21:00.</p>
+    <a href="tel:+998971719600">+998 97 171 96 00</a>
+  </div>
+
+  <div class="contact-card">
+    <div class="icon">WA</div>
+    <h3>WhatsApp</h3>
+    <p>Eng qulay tezkor aloqa.</p>
+    <a href="https://wa.me/998971719600" target="_blank">WhatsApp orqali yozish</a>
+  </div>
+
+  <div class="contact-card">
+    <div class="icon">TG</div>
+    <h3>Telegram kanal</h3>
+    <p>Yangiliklar, maslahatlar, chegirmalar.</p>
+    <a href="https://t.me/abuchat_uz" target="_blank">@abuchat_uz</a>
+  </div>
+
+  <div class="contact-card">
+    <div class="icon">IG</div>
+    <h3>Instagram</h3>
+    <p>DM orqali shaxsiy aloqa.</p>
+    <a href="https://instagram.com/abuelectric.uz" target="_blank">@abuelectric.uz</a>
+  </div>
+
+  <div class="contact-card">
+    <div class="icon">YT</div>
+    <h3>YouTube</h3>
+    <p>Video qo'llanmalar va darsliklar.</p>
+    <a href="https://youtube.com/@ABUELECTRIC_UZ" target="_blank">@ABUELECTRIC_UZ</a>
+  </div>
 </div>
+
 <div class="form-section">
   <h2 style="margin-bottom:8px;">Yoki shu yerga yozing</h2>
   <p style="color:var(--muted); margin-bottom:18px; font-size:14px;">Forma email orqali to'g'ridan-to'g'ri bizga keladi.</p>
@@ -40,18 +82,42 @@
       <div><label>Ismingiz</label><input type="text" id="name" required placeholder="Ism Familiya"></div>
       <div><label>Email</label><input type="email" id="email" required placeholder="siz@example.com"></div>
     </div>
-    <label>Mavzu</label><select id="topic"><option>Umumiy savol</option><option>Texnik yordam</option><option>Pulni qaytarish</option><option>Shikoyat</option><option>Hamkorlik taklifi</option></select>
-    <label>Xabaringiz</label><textarea id="msg" required rows="5" placeholder="Savol yoki muammoni tushuntiring..."></textarea>
+    <label>Mavzu</label>
+    <select id="topic">
+      <option>Umumiy savol</option>
+      <option>Texnik yordam</option>
+      <option>Pulni qaytarish</option>
+      <option>Shikoyat</option>
+      <option>Hamkorlik taklifi</option>
+    </select>
+    <label>Xabaringiz</label>
+    <textarea id="msg" required rows="5" placeholder="Savol yoki muammoni tushuntiring..."></textarea>
     <button type="submit" class="btn" style="margin-top:18px;">Yuborish</button>
   </form>
   <div id="result" style="margin-top:14px;"></div>
 </div>
+
 <div style="text-align:center; margin-top:36px; color:var(--muted); font-size:14px;">
   <p>Birinchi marta sinab ko'rmoqchimisiz?</p>
   <a href="/register.html" class="btn green" style="margin-top:8px;">Bepul boshlash</a>
 </div>
 </div>
-<footer class="site" style="background: var(--text); color: #cbd5e1; padding: 36px 0; text-align: center; font-size: 13px; margin-top: 60px;"><div class="container"><a href="/" style="color:white; font-weight:800; font-size:22px; text-decoration:none;">ABU-chat</a><p style="margin-top:8px;">Instagram avto-javob xizmati</p><p style="margin-top:12px;"><a href="/privacy_policy.html" style="color:#93c5fd; margin:0 10px;">Maxfiylik</a><a href="/terms_of_service.html" style="color:#93c5fd; margin:0 10px;">Shartlar</a><a href="/faq.html" style="color:#93c5fd; margin:0 10px;">FAQ</a></p><p style="margin-top:12px; opacity:.6;">2026 ABU-chat</p></div></footer>
+
+<footer class="site" style="background: var(--text); color: #cbd5e1; padding: 36px 0; text-align: center; font-size: 13px; margin-top: 60px;">
+<div class="container">
+<a href="/" class="logo" style="justify-content:center;">ABU-<span>chat</span></a>
+<p style="margin-top:8px;">Instagram avto-javob xizmati &middot; Toshkent, O'zbekiston</p>
+<p style="margin-top:12px;">
+<a href="/privacy_policy.html" style="color:#93c5fd; margin:0 10px;">Maxfiylik</a>
+<a href="/terms_of_service.html" style="color:#93c5fd; margin:0 10px;">Shartlar</a>
+<a href="/faq.html" style="color:#93c5fd; margin:0 10px;">FAQ</a>
+<a href="https://t.me/abuchat_uz" target="_blank" style="color:#93c5fd; margin:0 10px;">Telegram</a>
+<a href="https://instagram.com/abuelectric.uz" target="_blank" style="color:#93c5fd; margin:0 10px;">Instagram</a>
+</p>
+<p style="margin-top:12px; opacity:.6;">2026 ABU-chat</p>
+</div>
+</footer>
+
 <script>
   document.getElementById('form').addEventListener('submit',(e)=>{
     e.preventDefault();
