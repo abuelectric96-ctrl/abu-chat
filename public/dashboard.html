@@ -2,9 +2,40 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard — ABU-chat</title>
+<title>Dashboard - ABU-chat</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/css/style.css">
+<style>
+  /* Dashboard-only animations */
+  .stagger > * { opacity: 0; animation: stagIn .5s ease forwards; }
+  .stagger > *:nth-child(1) { animation-delay: .05s; }
+  .stagger > *:nth-child(2) { animation-delay: .15s; }
+  .stagger > *:nth-child(3) { animation-delay: .25s; }
+  .stagger > *:nth-child(4) { animation-delay: .35s; }
+  @keyframes stagIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .progress-rail { display: flex; gap: 0; margin: 18px 0; }
+  .progress-step { flex: 1; padding: 14px 12px; background: white; border: 2px solid var(--line); border-radius: 10px; text-align: center; position: relative; transition: all .25s; }
+  .progress-step.done { background: linear-gradient(135deg, var(--green-soft), var(--green-dark)); border-color: var(--green-dark); color: white; }
+  .progress-step.active { border-color: var(--blue-bright); border-style: dashed; animation: pulse 2s infinite; }
+  .progress-step + .progress-step { margin-left: 8px; }
+  .progress-step .num { font-size: 18px; font-weight: 800; }
+  .progress-step .lbl { font-size: 12px; margin-top: 2px; opacity: .9; }
+  .progress-step.done .lbl { opacity: 1; }
+
+  .quick-tips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  @media (max-width: 720px) { .quick-tips { grid-template-columns: 1fr; } }
+  .tip { padding: 14px; background: linear-gradient(135deg, #F0FFF4 0%, #F0F9FF 100%); border-radius: 12px; font-size: 13px; color: var(--text); border-left: 4px solid var(--green-dark); }
+  .tip strong { display: block; margin-bottom: 4px; color: var(--blue-deep); font-size: 13px; }
+
+  /* Sidebar nav icons */
+  .sidebar a::before { content: ""; width: 18px; height: 18px; flex-shrink: 0; background-size: contain; background-repeat: no-repeat; opacity: .8; }
+  .sidebar a[data-tab="overview"]::before { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z'/></svg>"); }
+  .sidebar a[data-tab="accounts"]::before { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 4a3 3 0 110 6 3 3 0 010-6zm0 14a8 8 0 01-6.4-3.2c0-2.1 4.3-3.3 6.4-3.3s6.4 1.2 6.4 3.3A8 8 0 0112 20z'/></svg>"); }
+  .sidebar a[data-tab="rules"]::before { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z'/></svg>"); }
+  .sidebar a[data-tab="logs"]::before { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M12 8V4l8 8-8 8v-4H4V8z'/></svg>"); }
+</style>
 </head>
 <body>
 <div class="app">
@@ -14,9 +45,9 @@
     <a href="#" data-tab="accounts">Instagram akkauntlari</a>
     <a href="#" data-tab="rules">Avto-javob qoidalari</a>
     <a href="#" data-tab="logs">Tarix (loglar)</a>
-    <div style="margin-top:auto; padding-top: 18px; border-top: 1px solid var(--line);">
-      <div id="who" style="font-size:13px; color:var(--muted); margin-bottom:8px;"></div>
-      <a href="#" id="logout" class="btn outline full" style="font-size:13px;">Chiqish</a>
+    <div style="margin-top:auto; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.15);">
+      <div id="who" style="font-size:12px; color:rgba(255,255,255,.7); margin-bottom:8px;"></div>
+      <a href="#" id="logout" style="background: rgba(255,255,255,.1); color: white; padding: 8px 12px; border-radius: 8px; font-size: 13px; text-align: center; display: block;">Chiqish</a>
     </div>
   </aside>
 
@@ -24,23 +55,69 @@
 
     <!-- OVERVIEW -->
     <section data-pane="overview">
-      <h1 class="page-title">Salom <span id="hi"></span> 👋</h1>
-      <p class="page-sub">Ko'pchilik mijozlar 5 daqiqada birinchi qoidasini sozlashadi.</p>
+
+      <!-- Welcome banner with animation -->
+      <div class="welcome-banner">
+        <h1>Salom <span id="hi"></span> <span class="wave">👋</span></h1>
+        <p>ABU-chat'ga xush kelibsiz! Pastdagi qadamlardan boshlang — bir necha daqiqada birinchi avto-javobingiz ishga tushadi.</p>
+      </div>
 
       <div id="alert"></div>
 
-      <div class="grid-2" style="margin-bottom:18px;">
-        <div class="stat"><div class="lbl">Ulangan akkauntlar</div><div class="num" id="stat_accounts">0</div></div>
-        <div class="stat"><div class="lbl">Bu oy yuborilgan javoblar</div><div class="num" id="stat_replies">0</div></div>
+      <!-- Progress rail -->
+      <div class="progress-rail stagger">
+        <div class="progress-step active">
+          <div class="num">1</div>
+          <div class="lbl">Instagram ulang</div>
+        </div>
+        <div class="progress-step">
+          <div class="num">2</div>
+          <div class="lbl">Qoida yarating</div>
+        </div>
+        <div class="progress-step">
+          <div class="num">3</div>
+          <div class="lbl">Birinchi javob</div>
+        </div>
       </div>
 
-      <div class="card">
-        <h3 style="margin-bottom:8px;">1-qadam — Instagram'ni ulang</h3>
-        <p style="color:var(--muted); margin-bottom:14px; font-size:14px;">
-          Facebook orqali ruxsat bering. Parolingizni so'ramaymiz.
-        </p>
-        <a href="/api/auth/meta/start" class="btn">Instagramni ulash</a>
+      <!-- Stats -->
+      <div class="grid-2 stagger" style="margin-top: 24px;">
+        <div class="stat">
+          <div class="icon">📱</div>
+          <div class="lbl">Ulangan akkauntlar</div>
+          <div class="num" id="stat_accounts">0</div>
+        </div>
+        <div class="stat">
+          <div class="icon">⚡</div>
+          <div class="lbl">Bu oy yuborilgan javoblar</div>
+          <div class="num" id="stat_replies">0</div>
+        </div>
       </div>
+
+      <!-- Step 1 card -->
+      <div class="step-card stagger">
+        <span class="step-num">1-QADAM</span>
+        <h3>Instagram'ni ulang</h3>
+        <p>Bir marta Facebook orqali ruxsat bering — parol bermaysiz, akkauntingiz xavfsiz. 30 soniyada hammasi tayyor.</p>
+        <a href="/api/auth/meta/start" class="btn pulse">Instagramni ulash</a>
+      </div>
+
+      <!-- Quick tips -->
+      <div class="quick-tips stagger" style="margin-top: 24px;">
+        <div class="tip">
+          <strong>💡 Maslahat 1</strong>
+          Aniq kalit so'zlar tanlang — masalan "narx" yoki "yetkazib" — umumiy emas.
+        </div>
+        <div class="tip">
+          <strong>💡 Maslahat 2</strong>
+          Javob matni qisqa bo'lsin (1-2 jumla). Uzoq javoblar mijozni charchatadi.
+        </div>
+        <div class="tip">
+          <strong>💡 Maslahat 3</strong>
+          {username} ni javob ichida ishlating — shaxsiy javob ko'rinadi.
+        </div>
+      </div>
+
     </section>
 
     <!-- ACCOUNTS -->
@@ -104,10 +181,9 @@
   const me = await requireAuth();
   if (!me) return;
   const client = me.client;
-  document.getElementById('hi').textContent = client.full_name || client.email;
+  document.getElementById('hi').textContent = client.full_name || client.email.split('@')[0];
   document.getElementById('who').textContent = client.email;
 
-  // ---- Tabs ----
   document.querySelectorAll('.sidebar a[data-tab]').forEach((a) => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
@@ -127,84 +203,79 @@
     location.href = '/login.html';
   });
 
-  // ---- Banner from OAuth callback ----
   const params = new URLSearchParams(location.search);
   if (params.get('ig') === 'connected') {
-    document.getElementById('alert').innerHTML =
-      `<div class="alert success">Instagram muvaffaqiyatli ulandi 🎉</div>`;
+    document.getElementById('alert').innerHTML = '<div class="alert success">Instagram muvaffaqiyatli ulandi 🎉</div>';
   } else if (params.get('ig') === 'none') {
-    document.getElementById('alert').innerHTML =
-      `<div class="alert error">Hisobingizda Instagram Business akkaunt topilmadi. Avval IG'ni Facebook Page'ga ulang.</div>`;
+    document.getElementById('alert').innerHTML = '<div class="alert error">Hisobingizda Instagram Business akkaunt topilmadi. Avval IG ni Facebook Page ga ulang.</div>';
   }
 
-  // ---- Stats ----
   await refreshStats();
   async function refreshStats() {
     try {
       const a = await api.get('/api/auth/meta/ig-accounts');
-      document.getElementById('stat_accounts').textContent = a.accounts.length;
+      animateNumber(document.getElementById('stat_accounts'), a.accounts.length);
+      // update progress rail
+      if (a.accounts.length > 0) {
+        const steps = document.querySelectorAll('.progress-step');
+        steps[0].classList.remove('active');
+        steps[0].classList.add('done');
+        steps[1].classList.add('active');
+      }
     } catch {}
     try {
       const u = await api.get('/api/rules/usage');
-      document.getElementById('stat_replies').textContent = u.usage.replies_sent;
+      animateNumber(document.getElementById('stat_replies'), u.usage.replies_sent);
     } catch {}
   }
 
-  // ---- Accounts ----
+  function animateNumber(el, target) {
+    const start = parseInt(el.textContent) || 0;
+    const duration = 800;
+    const startTime = performance.now();
+    function step(now) {
+      const t = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(start + (target - start) * eased);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  let cachedAccounts = [];
   async function loadAccounts() {
     const box = document.getElementById('accounts_list');
     try {
       const r = await api.get('/api/auth/meta/ig-accounts');
       if (!r.accounts.length) { box.textContent = 'Hali biror akkaunt ulanmagan.'; return; }
-      box.innerHTML = `<table><thead><tr>
-        <th>Foydalanuvchi nomi</th><th>IG ID</th><th>Holat</th><th>Ulangan vaqt</th><th></th>
-      </tr></thead><tbody>${r.accounts.map((a) => `
-        <tr>
-          <td><b>@${escapeHtml(a.username)}</b></td>
-          <td>${a.ig_user_id}</td>
-          <td><span class="badge ${a.is_active ? 'sent' : 'skipped'}">${a.is_active ? 'Aktiv' : 'O\\'chirilgan'}</span></td>
-          <td>${new Date(a.connected_at).toLocaleDateString('uz-UZ')}</td>
-          <td>${a.is_active ? `<button class="btn outline" data-disconnect="${a.id}" style="font-size:12px;padding:6px 12px;">Uzish</button>` : ''}</td>
-        </tr>
-      `).join('')}</tbody></table>`;
+      box.innerHTML = '<table><thead><tr><th>Foydalanuvchi nomi</th><th>IG ID</th><th>Holat</th><th>Ulangan vaqt</th><th></th></tr></thead><tbody>' +
+        r.accounts.map((a) => '<tr><td><b>@' + escapeHtml(a.username) + '</b></td><td>' + a.ig_user_id + '</td><td><span class="badge ' + (a.is_active ? 'sent' : 'skipped') + '">' + (a.is_active ? 'Aktiv' : 'O\'chirilgan') + '</span></td><td>' + new Date(a.connected_at).toLocaleDateString('uz-UZ') + '</td><td>' + (a.is_active ? '<button class="btn outline" data-disconnect="' + a.id + '" style="font-size:12px;padding:6px 12px;">Uzish</button>' : '') + '</td></tr>').join('') + '</tbody></table>';
       box.querySelectorAll('[data-disconnect]').forEach((b) => {
         b.addEventListener('click', async () => {
           if (!confirm('Akkauntni uzasizmi?')) return;
-          await api.post(`/api/auth/meta/ig-accounts/${b.dataset.disconnect}/disconnect`);
+          await api.post('/api/auth/meta/ig-accounts/' + b.dataset.disconnect + '/disconnect');
           loadAccounts(); refreshStats();
         });
       });
     } catch (e) { box.textContent = 'Yuklashda xato.'; }
   }
 
-  // ---- Rules ----
-  let cachedAccounts = [];
   async function loadRules() {
     cachedAccounts = (await api.get('/api/auth/meta/ig-accounts')).accounts;
     const sel = document.getElementById('r_account');
-    sel.innerHTML = cachedAccounts.length
-      ? cachedAccounts.map((a) => `<option value="${a.id}">@${escapeHtml(a.username)}</option>`).join('')
-      : '<option disabled>Avval Instagram akkaunt ulang</option>';
-
+    sel.innerHTML = cachedAccounts.length ? cachedAccounts.map((a) => '<option value="' + a.id + '">@' + escapeHtml(a.username) + '</option>').join('') : '<option disabled>Avval Instagram akkaunt ulang</option>';
     const r = await api.get('/api/rules');
     const list = document.getElementById('rules_list');
     if (!r.rules.length) { list.textContent = 'Hozircha qoida yo\'q.'; return; }
-    list.innerHTML = `<table><thead><tr>
-      <th>Akkaunt</th><th>Kalit so'z</th><th>Javob</th><th>Holat</th><th></th>
-    </tr></thead><tbody>${r.rules.map((rl) => {
-      const acc = cachedAccounts.find((a) => a.id === rl.ig_account_id);
-      return `<tr>
-        <td>${acc ? '@' + escapeHtml(acc.username) : '—'}</td>
-        <td><b>${escapeHtml(rl.keyword)}</b></td>
-        <td style="max-width:340px;">${escapeHtml(rl.reply_text)}</td>
-        <td><span class="badge ${rl.is_active ? 'sent' : 'skipped'}">${rl.is_active ? 'Aktiv' : 'Pauza'}</span></td>
-        <td><button class="btn danger" data-del="${rl.id}" style="font-size:12px;padding:6px 12px;">O'chirish</button></td>
-      </tr>`;
-    }).join('')}</tbody></table>`;
+    list.innerHTML = '<table><thead><tr><th>Akkaunt</th><th>Kalit so\'z</th><th>Javob</th><th>Holat</th><th></th></tr></thead><tbody>' +
+      r.rules.map((rl) => {
+        const acc = cachedAccounts.find((a) => a.id === rl.ig_account_id);
+        return '<tr><td>' + (acc ? '@' + escapeHtml(acc.username) : '—') + '</td><td><b>' + escapeHtml(rl.keyword) + '</b></td><td style="max-width:340px;">' + escapeHtml(rl.reply_text) + '</td><td><span class="badge ' + (rl.is_active ? 'sent' : 'skipped') + '">' + (rl.is_active ? 'Aktiv' : 'Pauza') + '</span></td><td><button class="btn danger" data-del="' + rl.id + '" style="font-size:12px;padding:6px 12px;">O\'chirish</button></td></tr>';
+      }).join('') + '</tbody></table>';
     list.querySelectorAll('[data-del]').forEach((b) => {
       b.addEventListener('click', async () => {
         if (!confirm('Qoidani o\'chirasizmi?')) return;
-        await api.del(`/api/rules/${b.dataset.del}`);
+        await api.del('/api/rules/' + b.dataset.del);
         loadRules();
       });
     });
@@ -226,23 +297,13 @@
     }
   });
 
-  // ---- Logs ----
   async function loadLogs() {
     const box = document.getElementById('logs_list');
     try {
       const r = await api.get('/api/rules/replies');
       if (!r.replies.length) { box.textContent = 'Hozircha javoblar yo\'q.'; return; }
-      box.innerHTML = `<table><thead><tr>
-        <th>Vaqt</th><th>Akkaunt</th><th>Komment</th><th>Yuborilgan javob</th><th>Holat</th>
-      </tr></thead><tbody>${r.replies.map((x) => `
-        <tr>
-          <td>${new Date(x.created_at).toLocaleString('uz-UZ')}</td>
-          <td>@${escapeHtml(x.ig_username)}</td>
-          <td style="max-width:240px;">${escapeHtml(x.comment_text || '')}</td>
-          <td style="max-width:240px;">${escapeHtml(x.reply_text || '—')}</td>
-          <td><span class="badge ${x.status}">${x.status}</span></td>
-        </tr>
-      `).join('')}</tbody></table>`;
+      box.innerHTML = '<table><thead><tr><th>Vaqt</th><th>Akkaunt</th><th>Komment</th><th>Yuborilgan javob</th><th>Holat</th></tr></thead><tbody>' +
+        r.replies.map((x) => '<tr><td>' + new Date(x.created_at).toLocaleString('uz-UZ') + '</td><td>@' + escapeHtml(x.ig_username) + '</td><td style="max-width:240px;">' + escapeHtml(x.comment_text || '') + '</td><td style="max-width:240px;">' + escapeHtml(x.reply_text || '—') + '</td><td><span class="badge ' + x.status + '">' + x.status + '</span></td></tr>').join('') + '</tbody></table>';
     } catch { box.textContent = 'Yuklashda xato.'; }
   }
 
