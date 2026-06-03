@@ -332,7 +332,8 @@
         btn.textContent = 'To\'lovga o\'tish →';
 
         if (e.message === 'http_401') {
-          window.location.href = '/login.html';
+          const returnUrl = `/payment.html?plan=${selectedPlan}`;
+          window.location.href = '/login.html?redirect=' + encodeURIComponent(returnUrl);
           return;
         }
         alert('Xatolik yuz berdi: ' + (e.message || 'qaytadan urinib ko\'ring'));
