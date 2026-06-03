@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>ABU-chat — Obuna</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { background: var(--bg-soft, #f4f7fb); min-height: 100vh; }
+
+    .pay-wrap {
+      max-width: 520px;
+      margin: 60px auto;
+      padding: 0 16px;
+    }
+
+    .pay-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 32px rgba(30,80,180,.10);
+      padding: 36px 32px;
+    }
+
+    .pay-card h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: #1a2340;
+    }
+
+    .pay-card .subtitle {
+      color: #6b7a99;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    /* Reja tanlash */
+    .plan-select {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .plan-opt {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f5;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .18s, background .18s;
+    }
+
+    .plan-opt:hover { border-color: #4f8ef7; }
+    .plan-opt.selected { border-color: #2563eb; background: #eff5ff; }
+
+    .plan-opt input[type=radio] { display: none; }
+
+    .plan-info { flex: 1; }
+    .plan-name { font-weight: 600; font-size: 15px; color: #1a2340; }
+    .plan-desc { font-size: 12px; color: #6b7a99; margin-top: 2px; }
+
+    .plan-price {
+      font-weight: 700;
+      font-size: 16px;
+      color: #2563eb;
+      white-space: nowrap;
+    }
+
+    .plan-badge {
+      background: #22c55e;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* To'lov usuli */
+    .method-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+
+    .method-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .method-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 16px;
+      border: 2px solid #e2e8f5;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .18s, background .18s;
+      font-weight: 600;
+      font-size: 14px;
+      color: #1a2340;
+      background: #fff;
+    }
+
+    .method-btn:hover { border-color: #4f8ef7; }
+    .method-btn.selected { border-color: #2563eb; background: #eff5ff; }
+
+    .method-btn img { height: 32px; object-fit: contain; }
+
+    /* To'lash tugmasi */
+    .btn-pay {
+      width: 100%;
+      padding: 15px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .18s;
+    }
+
+    .btn-pay:hover { background: #1d4ed8; }
+    .btn-pay:disabled { background: #a0aec0; cursor: not-allowed; }
+
+    .pay-note {
+      text-align: center;
+      font-size: 12px;
+      color: #9baabb;
+      margin-top: 16px;
+    }
+
+    /* Muvaffaqiyat / xato holat */
+    .status-box {
+      text-align: center;
+      padding: 32px 16px;
+      display: none;
+    }
+
+    .status-box.show { display: block; }
+
+    .status-icon {
+      font-size: 52px;
+      margin-bottom: 14px;
+    }
+
+    .status-box h2 { font-size: 20px; color: #1a2340; margin-bottom: 8px; }
+    .status-box p  { color: #6b7a99; font-size: 14px; }
+
+    .btn-back {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 28px;
+      background: #2563eb;
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    #form-section { }
+  </style>
+</head>
+<body>
+  <div class="pay-wrap">
+    <div class="pay-card">
+
+      <!-- Muvaffaqiyat holat -->
+      <div class="status-box" id="success-box">
+        <div class="status-icon">✅</div>
+        <h2>To'lov muvaffaqiyatli!</h2>
+        <p>Obunangiz faollashtirildi. Endi barcha imkoniyatlardan foydalanishingiz mumkin.</p>
+        <a href="/dashboard.html" class="btn-back">Boshqaruv paneliga o'tish</a>
+      </div>
+
+      <!-- Xato holat -->
+      <div class="status-box" id="error-box">
+        <div class="status-icon">❌</div>
+        <h2>To'lov amalga oshmadi</h2>
+        <p id="error-msg">Qaytadan urinib ko'ring yoki boshqa to'lov usulini tanlang.</p>
+        <a href="/payment.html" class="btn-back">Qaytish</a>
+      </div>
+
+      <!-- To'lov formasi -->
+      <div id="form-section">
+        <h1>Obuna tanlang</h1>
+        <p class="subtitle">Click yoki Payme orqali bir zumda to'lang</p>
+
+        <!-- Rejalar -->
+        <div class="plan-select" id="plan-select">
+          <label class="plan-opt selected" data-plan="starter">
+            <input type="radio" name="plan" value="starter" checked>
+            <div class="plan-info">
+              <div class="plan-name">Boshlovchi</div>
+              <div class="plan-desc">1 ta Instagram · 2 000 javob/oy</div>
+            </div>
+            <div class="plan-price">49 000 so'm</div>
+          </label>
+
+          <label class="plan-opt" data-plan="business">
+            <input type="radio" name="plan" value="business">
+            <div class="plan-info">
+              <div class="plan-name">Biznes <span class="plan-badge">Mashhur</span></div>
+              <div class="plan-desc">3 ta Instagram · 15 000 javob/oy</div>
+            </div>
+            <div class="plan-price">119 000 so'm</div>
+          </label>
+
+          <label class="plan-opt" data-plan="pro">
+            <input type="radio" name="plan" value="pro">
+            <div class="plan-info">
+              <div class="plan-name">Pro</div>
+              <div class="plan-desc">5 ta Instagram · Cheksiz javob · AI</div>
+            </div>
+            <div class="plan-price">299 000 so'm</div>
+          </label>
+        </div>
+
+        <!-- To'lov usuli -->
+        <div class="method-label">To'lov usulini tanlang</div>
+        <div class="method-btns">
+          <button class="method-btn selected" id="btn-click" onclick="selectMethod('click')">
+            <img src="https://cdn.click.uz/site/img/click-logo-blue.svg"
+                 onerror="this.style.display='none'" alt="Click">
+            Click
+          </button>
+          <button class="method-btn" id="btn-payme" onclick="selectMethod('payme')">
+            <img src="https://cdn.payme.uz/theme/images/payme.svg"
+                 onerror="this.style.display='none'" alt="Payme">
+            Payme
+          </button>
+        </div>
+
+        <button class="btn-pay" id="pay-btn" onclick="startPayment()">
+          To'lovga o'tish →
+        </button>
+
+        <p class="pay-note">
+          Xavfsiz to'lov · SSL · Istalgan vaqtda bekor qilish
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    let selectedMethod = 'click';
+    let selectedPlan   = 'starter';
+
+    // URL parametrlarini tekshirish (to'lovdan qaytganda)
+    (function checkStatus() {
+      const params = new URLSearchParams(location.search);
+      const status  = params.get('status');
+      const orderId = params.get('order_id');
+
+      if (status === 'success') {
+        document.getElementById('form-section').style.display = 'none';
+        document.getElementById('success-box').classList.add('show');
+
+        // Holatni serverdan ham tekshirish
+        if (orderId) {
+          api.get(`/api/payment/status/${orderId}`).then(data => {
+            if (data.status !== 'paid') {
+              document.getElementById('success-box').classList.remove('show');
+              document.getElementById('error-box').classList.add('show');
+              document.getElementById('error-msg').textContent =
+                'To\'lov hali tasdiqlanmagan. Biroz kuting.';
+              document.getElementById('form-section').style.display = 'none';
+            }
+          }).catch(() => {});
+        }
+        return;
+      }
+
+      if (status === 'failed') {
+        document.getElementById('form-section').style.display = 'none';
+        document.getElementById('error-box').classList.add('show');
+        return;
+      }
+
+      // URL dan reja oldindan tanlash
+      const plan = params.get('plan');
+      if (plan) {
+        const opt = document.querySelector(`[data-plan="${plan}"]`);
+        if (opt) {
+          document.querySelectorAll('.plan-opt').forEach(el => el.classList.remove('selected'));
+          opt.classList.add('selected');
+          opt.querySelector('input').checked = true;
+          selectedPlan = plan;
+        }
+      }
+    })();
+
+    // Reja tanlash
+    document.querySelectorAll('.plan-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.plan-opt').forEach(el => el.classList.remove('selected'));
+        opt.classList.add('selected');
+        selectedPlan = opt.dataset.plan;
+      });
+    });
+
+    function selectMethod(method) {
+      selectedMethod = method;
+      document.getElementById('btn-click').classList.toggle('selected', method === 'click');
+      document.getElementById('btn-payme').classList.toggle('selected', method === 'payme');
+    }
+
+    async function startPayment() {
+      const btn = document.getElementById('pay-btn');
+      btn.disabled  = true;
+      btn.textContent = 'Yuklanmoqda...';
+
+      try {
+        const endpoint = selectedMethod === 'click'
+          ? `/api/payment/click/redirect?plan=${selectedPlan}`
+          : `/api/payment/payme/redirect?plan=${selectedPlan}`;
+
+        const data = await api.get(endpoint);
+        window.location.href = data.redirect_url;
+      } catch (e) {
+        btn.disabled  = false;
+        btn.textContent = 'To\'lovga o\'tish →';
+
+        if (e.message === 'http_401') {
+          window.location.href = '/login.html';
+          return;
+        }
+        alert('Xatolik yuz berdi: ' + (e.message || 'qaytadan urinib ko\'ring'));
+      }
+    }
+  </script>
+</body>
+</html>
