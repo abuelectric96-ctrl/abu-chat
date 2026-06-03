@@ -31,27 +31,32 @@
 
 <script src="/js/api.js"></script>
 <script>
-  const form = document.getElementById('form');
+  const form     = document.getElementById('form');
   const alertBox = document.getElementById('alert');
-  const submit = document.getElementById('submit');
+  const submit   = document.getElementById('submit');
+
+  // Kirish keyin qaerga yo'naltirish (payment.html?plan=xxx dan kelgan bo'lishi mumkin)
+  const redirectTo = new URLSearchParams(location.search).get('redirect') || '/dashboard.html';
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     alertBox.innerHTML = '';
-    submit.disabled = true; submit.textContent = 'Tekshirilmoqda...';
+    submit.disabled = true;
+    submit.textContent = 'Tekshirilmoqda...';
     try {
       await api.post('/api/auth/login', {
-        email: document.getElementById('email').value.trim(),
+        email:    document.getElementById('email').value.trim(),
         password: document.getElementById('password').value,
       });
-      location.href = '/dashboard.html';
+      location.href = redirectTo;
     } catch (err) {
       let msg = 'Xatolik.';
-      if (err.payload && err.payload.error === 'invalid_credentials') msg = 'Email yoki parol noto\'g\'ri.';
-      if (err.payload && err.payload.error === 'account_disabled') msg = 'Akkaunt o\'chirilgan.';
+      if (err.payload?.error === 'invalid_credentials') msg = 'Email yoki parol noto\'g\'ri.';
+      if (err.payload?.error === 'account_disabled')    msg = 'Akkaunt o\'chirilgan.';
       alertBox.innerHTML = `<div class="alert error">${msg}</div>`;
     } finally {
-      submit.disabled = false; submit.textContent = 'Kirish';
+      submit.disabled = false;
+      submit.textContent = 'Kirish';
     }
   });
 </script>
