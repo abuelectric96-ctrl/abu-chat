@@ -8,7 +8,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const db = require('../db');
-const { authRequired } = require('../middleware/authRequired');
+const authRequired = require('../middleware/authRequired');
 
 // ─── Rejalar ────────────────────────────────────────────────────────────────
 const PLANS = {
