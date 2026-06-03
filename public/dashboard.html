@@ -392,22 +392,41 @@
       const r = await api.get('/api/auth/meta/ig-accounts');
       cachedAccounts = r.accounts;
       if (!r.accounts.length) { box.textContent = 'Hali biror akkaunt ulanmagan.'; return; }
+      const now = Date.now();
       box.innerHTML =
         '<table><thead><tr><th>Foydalanuvchi nomi</th><th>IG ID</th><th>Holat</th>' +
-        '<th>Ulangan vaqt</th><th></th></tr></thead><tbody>' +
-        r.accounts.map(a =>
-          '<tr>' +
-          '<td><b>@' + esc(a.username) + '</b></td>' +
-          '<td>' + a.ig_user_id + '</td>' +
-          '<td><span class="badge ' + (a.is_active ? 'sent' : 'skipped') + '">' +
-            (a.is_active ? 'Aktiv' : "O'chirilgan") + '</span></td>' +
-          '<td>' + new Date(a.connected_at).toLocaleDateString('uz-UZ') + '</td>' +
-          '<td>' + (a.is_active
-            ? '<button class="btn outline" data-disconnect="' + a.id + '" ' +
-              'style="font-size:12px;padding:6px 12px;">Uzish</button>'
-            : '') + '</td>' +
-          '</tr>'
-        ).join('') + '</tbody></table>';
+        '<th>Token muddati</th><th>Ulangan vaqt</th><th></th></tr></thead><tbody>' +
+        r.accounts.map(a => {
+          // Token muddatini hisoblash
+          let tokenCell = '<span style="color:#9baabb;font-size:12px;">Noma\'lum</span>';
+          if (a.token_expires_at) {
+            const expMs   = new Date(a.token_expires_at).getTime();
+            const daysLeft = Math.ceil((expMs - now) / 86400000);
+            if (daysLeft <= 0) {
+              tokenCell = '<span style="color:#ef4444;font-weight:700;">⚠ Muddati tugagan</span>';
+            } else if (daysLeft <= 10) {
+              tokenCell = '<span style="color:#f59e0b;font-weight:700;">⚠ ' + daysLeft + ' kun qoldi</span>';
+            } else {
+              tokenCell = '<span style="color:#22c55e;">' + daysLeft + ' kun qoldi</span>';
+            }
+          }
+          return '<tr>' +
+            '<td><b>@' + esc(a.username) + '</b></td>' +
+            '<td>' + a.ig_user_id + '</td>' +
+            '<td><span class="badge ' + (a.is_active ? 'sent' : 'skipped') + '">' +
+              (a.is_active ? 'Aktiv' : "O'chirilgan") + '</span></td>' +
+            '<td>' + tokenCell + '</td>' +
+            '<td>' + new Date(a.connected_at).toLocaleDateString('uz-UZ') + '</td>' +
+            '<td style="display:flex;gap:6px;">' +
+              (a.is_active
+                ? '<button class="btn outline" data-disconnect="' + a.id + '" ' +
+                  'style="font-size:12px;padding:6px 10px;">Uzish</button>' +
+                  '<button class="btn outline" data-refresh-token="' + a.id + '" ' +
+                  'style="font-size:12px;padding:6px 10px;">🔄 Yangilash</button>'
+                : '') +
+            '</td>' +
+            '</tr>';
+        }).join('') + '</tbody></table>';
 
       box.querySelectorAll('[data-disconnect]').forEach(b => {
         b.addEventListener('click', async () => {
@@ -415,6 +434,21 @@
           await api.post('/api/auth/meta/ig-accounts/' + b.dataset.disconnect + '/disconnect');
           loadAccounts();
           refreshStats();
+        });
+      });
+
+      box.querySelectorAll('[data-refresh-token]').forEach(b => {
+        b.addEventListener('click', async () => {
+          b.disabled = true;
+          b.textContent = 'Yuklanmoqda...';
+          try {
+            await api.post('/api/auth/meta/ig-accounts/' + b.dataset.refreshToken + '/refresh-token');
+            loadAccounts();
+          } catch (e) {
+            alert('Token yangilashda xato: ' + (e.message || 'qaytadan urinib ko\'ring'));
+            b.disabled = false;
+            b.textContent = '🔄 Yangilash';
+          }
         });
       });
     } catch { box.textContent = 'Yuklashda xato.'; }
