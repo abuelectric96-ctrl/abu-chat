@@ -13,6 +13,7 @@ const authRoutes = require('./routes/auth');
 const metaOAuthRoutes = require('./routes/metaOAuth');
 const webhookRoutes = require('./routes/webhook');
 const rulesRoutes = require('./routes/rules');
+const paymentRoutes = require('./routes/payment');
 
 const app = express();
 const PORT = parseInt(process.env.PORT || '3000', 10);
@@ -46,6 +47,7 @@ app.use('/api/auth/register', authLimiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/auth/meta', metaOAuthRoutes);
 app.use('/api/rules', rulesRoutes);
+app.use('/api/payment', paymentRoutes);
 app.use('/webhook/meta', webhookRoutes);
 
 // --- 404 + error handler ---
