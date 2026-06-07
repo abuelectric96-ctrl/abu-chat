@@ -16,10 +16,12 @@ const router = express.Router();
 const APP_ID = process.env.META_APP_ID;
 const APP_SECRET = process.env.META_APP_SECRET;
 const REDIRECT = process.env.META_REDIRECT_URI;
-const SCOPES = (process.env.META_SCOPES || '').split(',').map((s) => s.trim()).filter(Boolean);
 
-// Step 1 — kick off OAuth. We tuck the client id into a signed `state` param
-// so the callback can match the redirect back to the right user.
+// Updated scopes for Instagram Business Login API (2024+)
+const DEFAULT_SCOPES = 'instagram_business_basic,instagram_business_manage_comments,instagram_business_manage_messages,pages_show_list,pages_read_engagement';
+const SCOPES = (process.env.META_SCOPES || DEFAULT_SCOPES).split(',').map((s) => s.trim()).filter(Boolean);
+
+// Step 1 — kick off OAuth.
 router.get('/start', authRequired, (req, res) => {
   if (!APP_ID || !REDIRECT) return res.status(500).send('Meta OAuth not configured');
   const nonce = crypto.randomBytes(16).toString('hex');
