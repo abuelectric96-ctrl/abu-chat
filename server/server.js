@@ -14,7 +14,6 @@ const metaOAuthRoutes  = require('./routes/metaOAuth');
 const webhookRoutes    = require('./routes/webhook');
 const rulesRoutes      = require('./routes/rules');
 const paymentRoutes    = require('./routes/payment');
-const adminResetRoutes = require('./routes/adminReset');
 const tokenAdminRoutes = require('./routes/tokenAdmin');
 const { startAutoRefresh } = require('./lib/tokenRefresh');
 
@@ -47,7 +46,6 @@ app.use('/api/auth/meta', tokenAdminRoutes);  // token yangilash endpointlari
 app.use('/api/rules',     rulesRoutes);
 app.use('/api/payment',   paymentRoutes);
 app.use('/webhook/meta',  webhookRoutes);
-app.use('/api', adminResetRoutes);
 
 // --- 404 + error handler ---
 app.use((req, res) => res.status(404).json({ error: 'not_found' }));
