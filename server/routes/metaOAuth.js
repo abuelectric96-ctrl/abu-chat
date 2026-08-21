@@ -21,6 +21,10 @@ const REDIRECT = process.env.META_REDIRECT_URI;
 const DEFAULT_SCOPES = 'instagram_business_basic,instagram_business_manage_comments,instagram_business_manage_messages,pages_show_list,pages_read_engagement';
 const SCOPES = (process.env.META_SCOPES || DEFAULT_SCOPES).split(',').map((s) => s.trim()).filter(Boolean);
 
+// Facebook Login for Business grants permissions through a saved configuration
+// rather than a raw scope list. Falls back to scope when no config is set.
+const CONFIG_ID = process.env.META_CONFIG_ID;
+
 // Step 1 — kick off OAuth.
 router.get('/start', authRequired, (req, res) => {
   if (!APP_ID || !REDIRECT) return res.status(500).send('Meta OAuth not configured');
@@ -31,7 +35,11 @@ router.get('/start', authRequired, (req, res) => {
   url.searchParams.set('client_id', APP_ID);
   url.searchParams.set('redirect_uri', REDIRECT);
   url.searchParams.set('state', state);
-  url.searchParams.set('scope', SCOPES.join(','));
+  if (CONFIG_ID) {
+    url.searchParams.set('config_id', CONFIG_ID);
+  } else {
+    url.searchParams.set('scope', SCOPES.join(','));
+  }
   url.searchParams.set('response_type', 'code');
   res.redirect(url.toString());
 });
